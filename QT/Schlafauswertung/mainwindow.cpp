@@ -6,12 +6,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setMinimumWidth(800);
 
     // Original Picture
     originalLabel = new QLabel(tr("Original Picture:"));
-    originalPicture = new QPixmap();
+    // originalPicture = new QPixmap();
     originalPictureLabel = new QLabel();
-    originalPictureLabel->setPixmap(*originalPicture);
+    // originalPictureLabel->setPixmap(*originalPicture);
 
     originalBox = new QGroupBox();
     originalBox->setLayout(new QHBoxLayout());
@@ -22,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Line Picture
     lineLabel = new QLabel(tr("Line Picture:"));
-    linePicture = new QPixmap();
+    // linePicture = new QPixmap();
     linePictureLabel = new QLabel();
-    linePictureLabel->setPixmap(*linePicture);
+    //linePictureLabel->setPixmap(*linePicture);
 
     linesBox = new QGroupBox();
     linesBox->setLayout(new QHBoxLayout());
@@ -36,10 +37,12 @@ MainWindow::MainWindow(QWidget *parent)
     // Threshold Slider
     thresholdSlider = new QSlider();
     thresholdSlider->setTickPosition(QSlider::TicksBelow);
-    thresholdSlider->setRange(0, 100);
+    thresholdSlider->setRange(low_threshold, maxlow_threshold);
     thresholdSlider->setOrientation(Qt::Orientation::Horizontal);
 
-    connect(thresholdSlider, &QSlider::sliderReleased, this, &MainWindow::setThresh);
+    // connect(thresholdSlider, &QSlider::sliderMoved, this, &MainWindow::setThresh);
+    // connect(thresholdSlider, &QSlider::sliderReleased, this, &MainWindow::setThresh);
+    connect(thresholdSlider, &QSlider::sliderReleased, this, &MainWindow::doCanny);
 
     sliderPosition = new QLabel("0");
     sliderPosition->setMinimumWidth(20);
@@ -84,8 +87,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::loadFile()
 {
-  // resize button
     qDebug() << "LoadFile clicked";
+    filePath = "B:\\Projekte\\Schlaf\\Bilder\\1_full.jpg";
+    originalPicture = new QPixmap(filePath);
+    originalPictureLabel->setPixmap(*originalPicture);
 }
 
 void MainWindow::setThresh(){
@@ -93,6 +98,22 @@ void MainWindow::setThresh(){
     sliderPosition->setText(QString::number(threshold));
 
     qDebug() << "Moved to " << thresholdSlider->value();
+}
+
+void MainWindow::calcLines(){
+    qDebug() << "Calculating Lines...";
+    src = *new cv::Mat();
+    // src = new cv::Mat(cv::imread(cv::String(filePath.toStdString())));
+    /*if(src->empty()){
+        qDebug() << "Doing nothing as no picture is selected";
+        qDebug() << "image Path: " << filePath;
+        return;
+    }*/
+}
+
+void MainWindow::doCanny(){
+    setThresh();
+    calcLines();
 }
 
 

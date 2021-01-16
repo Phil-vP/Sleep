@@ -13,7 +13,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
 
 FORMS += \
     mainwindow.ui
@@ -21,12 +21,19 @@ FORMS += \
 TRANSLATIONS += \
     Schlafauswertung_de_DE.ts
 
+INCLUDEPATH += D:\\Anderes\\Libraries\\opencv\\build\\include
+
+LIBS += D:/Anderes/Libraries/opencv-build/bin
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_core451.dll
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_highgui451.dll
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_imgcodecs451.dll
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_imgproc451.dll
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_features2d451.dll
+LIBS += D:\Anderes\Libraries\opencv-build\bin\libopencv_calib3d451.dll
+
+
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-win32:CONFIG(release, debug|release): LIBS += -LD:/Anderes/Libraries/opencv/build/x64/vc15/lib/ -lopencv_world451
-else:win32:CONFIG(debug, debug|release): LIBS += -LD:/Anderes/Libraries/opencv/build/x64/vc15/lib/ -lopencv_world451d
-else:unix: LIBS += -LD:/Anderes/Libraries/opencv/build/x64/vc15/lib/ -lopencv_world451
-

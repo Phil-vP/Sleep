@@ -16,6 +16,7 @@
 #include <opencv2/highgui.hpp>
 
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -30,7 +31,9 @@ public:
 
 private slots:
     void loadFile();
+    void doCanny();
     void setThresh();
+    void calcLines();
 
 private:
     Ui::MainWindow *ui;
@@ -58,6 +61,15 @@ private:
     QLayout *mainWindowLayout;
 
     int threshold = 0;
+    int low_threshold = 0;
+    int maxlow_threshold = 100;
+    const int ratio = 3;
+    const int kernel_size = 3;
+
+    QString filePath = "";
+
+    cv::Mat src, src_gray;
+    cv::Mat *dst, *detected_edges;
 
 
 };
