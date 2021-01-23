@@ -61,6 +61,4 @@ def printFilenames():
 
 if __name__== "__main__":
     print("Cropping images")
-    testImages()
-    # cropImages()
-    printFilenames()
+    cropImages()
