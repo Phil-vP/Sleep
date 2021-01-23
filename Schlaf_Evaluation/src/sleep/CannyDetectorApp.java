@@ -1,4 +1,4 @@
-package sample;
+package sleep;
 
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
@@ -9,15 +9,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
@@ -187,7 +182,7 @@ public class CannyDetectorApp {
             // System.out.println();
         }
 
-        indexList.add(dst.cols()+1);
+        indexList.add(dst.cols());
 
         System.out.println("Total number of lines: " + counter);
         System.out.println(indexList);
