@@ -1,3 +1,13 @@
+
+Auswertung/
+
+
+QT/build*
+QT/Schlafauswertung/lib/
+final_output/
+opencv2/
+venv/
+
 # .idea Files
 .idea/
 out/
