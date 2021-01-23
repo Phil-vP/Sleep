@@ -1,7 +1,7 @@
-# Bilder
+# Actual files
 Auswertung/
 
-# Own files
+# libs, builds etc.
 QT/build*
 QT/Schlafauswertung/lib/
 final_output/
