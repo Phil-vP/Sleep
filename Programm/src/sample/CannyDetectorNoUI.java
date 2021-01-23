@@ -33,24 +33,13 @@ public class CannyDetectorNoUI {
     private static final int RATIO = 3;
     private static final int KERNEL_SIZE = 3;
     private static final Size BLUR_SIZE = new Size(3,3);
-    private int lowThresh = 50;
+    private static final int lowThresh = 50;
     private String[] colors = {"Leicht", "Tief", "REM", "wach"};
     // private String[] colors = {"Türkis", "Blau  ", "Pink  ", "Orange"};
-    // private Mat src;
-    // private Mat srcBlur = new Mat();
-    // private Mat detectedEdges = new Mat();
-    // private Mat dst = new Mat();
 
     Map<String, Pair<String, String>> timeMap;
 
-    private Checkbox dayWrap;
-
-    public CannyDetectorNoUI(String[] args) {
-        /*timeMap = new HashMap<>(){{
-            put("1.jpg", new Pair<>("21:42", "02:27"));
-            put("1_full.jpg", new Pair<>("23:22", "06:10"));
-        }};*/
-
+    public CannyDetectorNoUI() {
         timeMap = new HashMap<>(){{
             put("crop_VP01_N1.JPG", new Pair<>("22:20", "05:12"));
             put("crop_VP01_N2.JPG", new Pair<>("22:03", "06:09"));
@@ -135,11 +124,9 @@ public class CannyDetectorNoUI {
             put("crop_VP34_N3.JPG", new Pair<>("21:42", "02:27"));
             put("crop_VP35_N1.JPG", new Pair<>("23:22", "06:10"));
         }};
-
-        calculateFolder("B:\\Projekte\\Schlaf\\Auswertung\\");
     }
 
-    private void calculateFolder(String path){
+    public void calculateFolder(String path){
         try (Stream<Path> paths = Files.walk(Paths.get(path))) {
             paths
                     .filter(Files::isRegularFile)
@@ -150,7 +137,6 @@ public class CannyDetectorNoUI {
         }
     }
 
-    // private void processImage(String dirPath, String filename){
     private void processImage(String fullPath){
 
         System.out.println("fullPath: " + fullPath);
@@ -167,8 +153,7 @@ public class CannyDetectorNoUI {
 
         System.out.println("Picture: " + filename);
         //
-        Mat src = new Mat();
-        src = Imgcodecs.imread(fullPath);
+        Mat src = Imgcodecs.imread(fullPath);
 
         if (src.empty()) {
             System.out.println("Empty image: " + fullPath + "\n");
@@ -177,15 +162,13 @@ public class CannyDetectorNoUI {
 
         Mat srcBlur = new Mat();
         Mat detectedEdges = new Mat();
-        Mat dst = new Mat();
+        Mat dst;
 
         System.out.println("src: " + src.toString());
 
-
-
         // CANNY
         Imgproc.blur(src, srcBlur, BLUR_SIZE);
-        Imgproc.Canny(srcBlur, detectedEdges, 50, 50 * RATIO, KERNEL_SIZE, false);
+        Imgproc.Canny(srcBlur, detectedEdges, lowThresh, lowThresh * RATIO, KERNEL_SIZE, false);
         dst = new Mat(src.size(), CvType.CV_8UC3, Scalar.all(0));
         src.copyTo(dst, detectedEdges);
 
@@ -219,7 +202,7 @@ public class CannyDetectorNoUI {
             timeTupel = timeMap.get(filename);
         }
         catch (Exception e){
-            System.out.println("ERROR, no TimeTupel found for " + filename + "\n");
+            System.out.println("ERROR, no Time Tupel found for " + filename + "\n");
             return;
         }
 
@@ -278,34 +261,9 @@ public class CannyDetectorNoUI {
             System.out.println("Area going from " + start.toString() + " to " + end.toString() + "; closest color: " + colors[closest] + ", Dauer: " + (int) duration_sec/60 + ":" + duration_sec % 60 + "min");
             resultText += String.format("Zeitraum: %8s - %8s; Schlafphase: %6s, Dauer: %02d:%02d min\n", start, end, colors[closest], (int) duration_sec/60, duration_sec % 60);
 
-
             index_1 = index_2;
             start = end;
-
-            // end_sec = start_sec;
         }
-
-        /*
-        for(int index_2 : indexList){
-            int closest = closestColor(src.get((int)src.rows()/2, (int)(index_1 + index_2)/2));
-            // System.out.println("Area going from " + index_1 + " to " + (index_2 - 1) + "; closest color: " + colors[closest]);
-            // LocalTime start = startTime.plusSeconds(seconds_pP * index_1);
-            // LocalTime end = startTime.plusSeconds(seconds_pP * index_2);
-
-            long duration_sec = (long) Math.floor((index_2 - index_1) * seconds_pP);
-
-            long start_sec = (long) Math.floor(start_seconds + index_1 * seconds_pP) % 86400;
-            System.out.println("Calculating (" + start_seconds + " + " + index_1 + " * " + seconds_pP + ") mod 86400 = " + (start_seconds + index_1 * seconds_pP) % 86400);
-            System.out.println("start_sec: " + start_sec);
-            long end_sec = (long) Math.floor(start_seconds + index_2 * seconds_pP) % 86400;
-            LocalTime start = LocalTime.ofSecondOfDay(start_sec);
-            LocalTime end = LocalTime.ofSecondOfDay(end_sec);
-            System.out.println("Area going from " + start + " to " + end + "; closest color: " + colors[closest] + ", Dauer: " + (int) duration_sec/60 + ":" + duration_sec % 60 + "min");
-            resultText += String.format("Zeitraum: %s - %s; Schlafphase: %s, Dauer: %d:%d min ", start, end, colors[closest], (int) duration_sec/60, duration_sec % 60);
-            resultText += "\n";
-            index_1 = index_2;
-        }
-        */
 
         try {
             String new_name = filename.substring(5, filename.length() - 4);
@@ -328,20 +286,9 @@ public class CannyDetectorNoUI {
 
 
     private int closestColor(double[] inputColor){
-        // Color tuerkis = new Color(31, 193, 136);
-        // double[] tuerkis = {31, 193, 136};
         double[] tuerkis = {136, 193, 31};
-
-        // Color blue = new Color(2, 154, 255);
-        // double[] blue = {2, 154, 255};
         double[] blue = {255, 154, 2};
-
-        // Color pink = new Color(255, 1, 152);
-        // double[] pink = {255, 1, 152};
         double[] pink = {152, 1, 255};
-
-        // Color orange = new Color(250, 97, 4);
-        // double[] orange = {250, 97, 4};
         double[] orange = {4, 97, 250};
 
         double diff_t = 0;
@@ -359,17 +306,6 @@ public class CannyDetectorNoUI {
 
         double[] colorDiff = {diff_t, diff_b, diff_p, diff_o};
 
-
-        /*
-        System.out.println();
-        System.out.println("########");
-        System.out.println("inputColor: " + Arrays.toString(inputColor));
-        System.out.println("Difference Türkis: " + diff_t);
-        System.out.println("Difference Blau: " + diff_b);
-        System.out.println("Difference Pink: " + diff_p);
-        System.out.println("Difference Orange: " + diff_o);
-        */
-
         double min = 1000;
         int min_index = 0;
 
@@ -379,16 +315,7 @@ public class CannyDetectorNoUI {
                 min = colorDiff[i];
                 min_index = i;
             }
-            else{
-                // System.out.println("Anscheinend ist " + colorDiff[i] + " > " + min);
-            }
         }
-
-        /*
-        System.out.println("########");
-        System.out.println();
-        */
-
         return min_index;
 
     }
@@ -396,13 +323,9 @@ public class CannyDetectorNoUI {
     public static void main(String[] args) {
         // Load the native OpenCV library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        // Schedule a job for the event dispatch thread:
-        // creating and showing this application's GUI.
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new CannyDetectorNoUI(args);
-            }
-        });
+
+        // Create a new instance and run it
+        CannyDetectorNoUI cdui = new CannyDetectorNoUI();
+        cdui.calculateFolder("B:\\Projekte\\Schlaf\\Auswertung\\");
     }
 }

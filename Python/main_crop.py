@@ -45,8 +45,8 @@ def testImages():
     top = 450
     bottom = 500
     im1 = image.crop((left, top, right, bottom))
-    # im1.show()
-    im1.save(path + "crop_" + filename, "JPEG")
+    im1.show()
+    # im1.save(path + "crop_" + filename, "JPEG")
 
 
 
@@ -61,6 +61,6 @@ def printFilenames():
 
 if __name__== "__main__":
     print("Cropping images")
-    # testImages()
+    testImages()
     # cropImages()
     printFilenames()

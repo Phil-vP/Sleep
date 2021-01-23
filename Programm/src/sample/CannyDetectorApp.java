@@ -60,8 +60,6 @@ public class CannyDetectorApp {
 
     private void loadNewPicture(){
 
-        // Mat src_new = PictureCutter.getMat();
-
         FileDialog fd = new FileDialog(frame, "Choose a file", FileDialog.LOAD);
         fd.setDirectory("B:\\");
         fd.setFile("*.jpg");
