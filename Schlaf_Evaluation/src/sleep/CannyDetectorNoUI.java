@@ -28,7 +28,8 @@ public class CannyDetectorNoUI {
     private static final int KERNEL_SIZE = 3;
     private static final Size BLUR_SIZE = new Size(3,3);
     private static final int lowThresh = 50;
-    private String[] colors = {"Leicht", "Tief", "REM", "wach"};
+    private String[] colors = {"L", "T", "R", "W"};
+    // private String[] colors = {"Leicht", "Tief", "REM", "wach"};
     // private String[] colors = {"Türkis", "Blau  ", "Pink  ", "Orange"};
 
     Map<String, Pair<String, String>> timeMap;
@@ -253,7 +254,8 @@ public class CannyDetectorNoUI {
 
             // long end_sec = Math.round(index_2 * seconds_pP) % 86400;
             System.out.println("Area going from " + start.toString() + " to " + end.toString() + "; closest color: " + colors[closest] + ", Dauer: " + (int) duration_sec/60 + ":" + duration_sec % 60 + "min");
-            resultText += String.format("Zeitraum: %8s - %8s; Schlafphase: %6s, Dauer: %02d:%02d min\n", start, end, colors[closest], (int) duration_sec/60, duration_sec % 60);
+            // resultText += String.format("Zeitraum: %8s - %8s; Schlafphase: %6s, Dauer: %02d:%02d min\n", start, end, colors[closest], (int) duration_sec/60, duration_sec % 60);
+            resultText += String.format("%8s,%8s,%d,%s\n", start, end, duration_sec, colors[closest]);
 
             index_1 = index_2;
             start = end;
@@ -265,6 +267,9 @@ public class CannyDetectorNoUI {
             fullPath = dirPath + new_name;
             System.out.println("Writing to Path " + fullPath);
             BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath));
+            writer.write(seconds + "\n");
+            writer.write(startTime.toString() + "\n");
+            writer.write(endTime.toString() + "\n-\n");
             writer.write(resultText);
             writer.close();
         }
