@@ -42,12 +42,10 @@ public class CannyDetectorApp {
 
     public CannyDetectorApp(String[] args) {
         // Create and set up the window.
-        frame = new JFrame("Edge Map (Canny detector demo)");
+        frame = new JFrame("Fitbit Auswertung");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set up the content pane.
         addComponentsToPane(frame.getContentPane());
-        // Use the content pane's default BorderLayout. No need for
-        // setLayout(new BorderLayout());
         // Display the window.
         frame.pack();
         frame.setVisible(true);
